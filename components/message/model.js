@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const mySchema = new Schema({
+    // create: must receive user's and chat's "_id"
     chat: {
         type: Schema.ObjectId,
         ref: 'Chat',

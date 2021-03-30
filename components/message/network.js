@@ -6,6 +6,7 @@ const response = require('../../network/response');
 const controller = require('./controller');
 const router = express.Router();
 
+// dest: file location
 const upload = multer({
     dest: 'public/' + config.filesRoute + '/',
 });
@@ -20,6 +21,7 @@ router.get('/', function (req, res) {
             response.error(req, res, 'Unexpected Error', 500, e);
         })
 });
+// middleware upload: multer add a image file
 router.post('/', upload.single('file'), function (req, res) { 
     controller.addMessage(req.body.chat, req.body.user, req.body.message, req.file)
         .then((fullMessage) => {

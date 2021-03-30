@@ -11,6 +11,8 @@ async function getMessages(filterChat) {
         if (filterChat !== null) {
             filter = { chat: filterChat };
         }
+        // populate: includes "username" instead of "_id"
+        // exec: execute the population or handle error
         Model.find(filter)
             .populate('user')
             .exec((error, populated) => {

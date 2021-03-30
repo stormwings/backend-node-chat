@@ -1,4 +1,5 @@
 const store = require('./store');
+// fetch only socket key
 const socket = require('../../socket').socket;
 const config = require('../../config');
 
@@ -25,6 +26,7 @@ function addMessage(chat, user, message, file) {
     
         store.add(fullMessage);
 
+        // emit 'message' to socket server => client
         socket.io.emit('message', fullMessage);
 
         resolve(fullMessage);
