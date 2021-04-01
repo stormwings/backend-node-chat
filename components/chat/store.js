@@ -1,13 +1,9 @@
-const Model = require('./model');
+import Model from './model';
 
-function addChat(chat) {
-    const myChat = new Model(chat);
-    return myChat.save();
-}
-
-function listChats(userId) {
+const listChats = (userId) => {
 	return new Promise((resolve, reject) => {
 		let filter = {};
+
 		if (userId) {
 			filter = {
 				users: userId,
@@ -27,7 +23,13 @@ function listChats(userId) {
 	});
 }
 
-module.exports = {
+const addChat = (chat) => {
+    const myChat = new Model(chat);
+
+    return myChat.save();
+}
+
+export default {
     add: addChat,
     list: listChats,
 }

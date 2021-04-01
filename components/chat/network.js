@@ -1,26 +1,31 @@
-const express = require('express');
-const response = require('../../network/response');
-const controller = require('./controller');
+import express from 'express';
+import { success, error } from '../../network/response';
+import controller from './controller';
+
 const router = express.Router();
 
-router.post('/', function(req, res) {
-    controller.addChat(req.body.users)
-        .then(data => {
-            response.success(req, res, data, 201);
-        })
-        .catch(err => {
-            response.error(req, res, 'Internal error', 500, err);
-        });
-});
+router.get('/:userId', (req, res) => {
+    const { userId } = req.params;
 
-router.get('/:userId', function(req, res) {
-    controller.listChats(req.params.userId)
+    controller.listChats(userId)
         .then(users => {
-            response.success(req, res, users, 200);
+            success(req, res, users, 200);
         })
         .catch(err => {
-            response.error(req, res, 'Internal error', 500, err);
+            error(req, res, 'Internal error', 500, err);
         });
 });
 
-module.exports = router;
+router.post('/', (req, res) => {
+    const { users } = req.body;
+
+    controller.addChat(users)
+        .then(data => {
+            success(req, res, data, 201);
+        })
+        .catch(err => {
+            error(req, res, 'Internal error', 500, err);
+        });
+});
+
+export default router;
