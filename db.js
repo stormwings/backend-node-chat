@@ -1,11 +1,13 @@
-const db = require('mongoose');
+import db from 'mongoose';
 
 db.Promise = global.Promise;
 
-async function connect(url) {
+const connect = async (url) => {
     await db.connect(url, {
         useNewUrlParser: true,
+        useUnifiedTopology: true,
     });
+
     console.log('[db] connection successful');
 }
 

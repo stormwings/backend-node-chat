@@ -1,11 +1,11 @@
-const socketIO = require('socket.io');
+import socketIO from 'socket.io';
 const socket = {};
 
-function connect(server) {
+const connect = (server) => {
     socket.io = socketIO(server);
 }
 
-module.exports = {
+export default {
     connect,
     socket,
 };
