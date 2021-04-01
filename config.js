@@ -1,3 +1,7 @@
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 const config = {
     dbUrl: process.env.DB_URL,
     port: process.env.PORT,
@@ -6,4 +10,4 @@ const config = {
     filesRoute: process.env.FILES_ROUTE
 };
 
-module.exports = config;
+export default config;

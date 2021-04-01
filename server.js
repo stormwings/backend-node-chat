@@ -1,30 +1,24 @@
-require('dotenv').config()
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
+import config from './config';
+import socket from './socket';
+import database from './db';
+import router from './network/routes';
 
-const express = require('express');
 const app = express();
-const server = require('http').Server(app);
-
-const config = require('./config');
-
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const socket = require('./socket');
-const db = require('./db');
-const router = require('./network/routes');
-
-db(config.dbUrl);
+const server = http.Server(app);
 
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
+database(config.dbUrl);
 socket.connect(server);
-
 router(app);
 
 app.use(config.publicRoute, express.static('public'));
 
 server.listen(config.port, function () {
-    console.log('server up '+ config.host +':' + config.port);
+    console.log(`server up ${config.host}:${config.port}`);
 });
