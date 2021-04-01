@@ -1,21 +1,21 @@
-const store = require('./store');
+import store from './store';
 
-function addUser(name) {
-    if (!name) {
+const addUser = (name) => {
+    if (!name)
         return Promise.reject('Invalid name');
-    }
 
     const user = {
         name,
     };
+
     return store.add(user);
 }
 
-function listUsers() {
+const listUsers = () => {
     return store.list();
 }
 
-module.exports = {
+export default {
     addUser,
     listUsers,
 }

@@ -1,26 +1,27 @@
-const express = require('express');
-const response = require('../../network/response');
-const controller = require('./controller');
+import express from 'express';
+import { success, error } from '../../network/response';
+import controller from './controller';
+
 const router = express.Router();
 
-router.post('/', function(req, res) {
-    controller.addUser(req.body.name)
-        .then(data => {
-            response.success(req, res, data, 201);
-        })
-        .catch(err => {
-            response.error(req, res, 'Internal error', 500, err);
-        });
-});
-
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
     controller.listUsers()
         .then(users => {
-            response.success(req, res, users, 200);
+            success(req, res, users, 200);
         })
         .catch(err => {
-            response.error(req, res, 'Internal error', 500, err);
+            error(req, res, 'Internal error', 500, err);
         });
 });
 
-module.exports = router;
+router.post('/', (req, res) => {
+    controller.addUser(req.body.name)
+        .then(data => {
+            success(req, res, data, 201);
+        })
+        .catch(err => {
+            error(req, res, 'Internal error', 500, err);
+        });
+});
+
+export default router;

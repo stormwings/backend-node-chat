@@ -1,15 +1,16 @@
-const Model = require('./model');
+import Model from './model';
 
-function addUser(user) {
+const addUser = (user) => {
     const myUser = new Model(user);
+
     return myUser.save();
 }
 
-function listUsers() {
+const listUsers = () => {
     return Model.find();
 }
 
-module.exports = {
+export default {
     add: addUser,
     list: listUsers,
 }
