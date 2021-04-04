@@ -1,54 +1,65 @@
-const express = require('express');
-const multer = require('multer');
+import express from 'express';
+import multer from 'multer';
+import config from '../../config';
+import { success, error } from '../../network/response';
+import controller from './controller';
 
-const config = require('../../config');
-const response = require('../../network/response');
-const controller = require('./controller');
 const router = express.Router();
 
 // dest: file location
 const upload = multer({
-    dest: 'public/' + config.filesRoute + '/',
+    dest: `public/${config.filesRoute}/`,
 });
 
-router.get('/', function (req, res) {
-    const filterMessages = req.query.chat || null;
-    controller.getMessages(filterMessages)
+router.get('/', (req, res) => {
+    const { chat: chatId } = req.query || null;
+
+    controller.getMessages(chatId)
         .then((messageList) => {
-            response.success(req, res, messageList, 200);
+            success(req, res, messageList, 200);
         })
         .catch(e => {
-            response.error(req, res, 'Unexpected Error', 500, e);
-        })
+            error(req, res, 'Unexpected Error', 500, e);
+        });
 });
+
 // middleware upload: multer add a image file
-router.post('/', upload.single('file'), function (req, res) { 
-    controller.addMessage(req.body.chat, req.body.user, req.body.message, req.file)
+router.post('/', upload.single('file'), (req, res) => {
+    const { chat, user, message } = req.body;
+    const file = req.file;
+
+    controller.addMessage(chat, user, message, file)
         .then((fullMessage) => {
-            response.success(req, res, fullMessage, 201);    
+            success(req, res, fullMessage, 201);    
         })
         .catch(e => {
-            response.error(req, res, 'invalid information', 400, 'controller error');
+            error(req, res, 'invalid information', 400, 'controller error');
         });
 });
-router.patch('/:id', function (req, res) {
-    controller.updateMessage(req.params.id, req.body.message)
+
+router.patch('/:id', (req, res) => {
+    const { message } = req.body;
+    const { id } = req.params;
+
+    controller.updateMessage(id, message)
         .then((data) => {
-            response.success(req, res, data, 200);
+            success(req, res, data, 200);
         })
         .catch(e => {
-            response.error(req, res, 'Internal Error', 500, e);
+            error(req, res, 'Internal Error', 500, e);
         });
 });
 
-router.delete('/:id', function(req, res) {
-    controller.deleteMessage(req.params.id)
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    controller.deleteMessage(id)
         .then(() => {
-            response.success(req, res, `Mensaje ${req.params.id} eliminado`, 200);
+            success(req, res, `message ${id} delete`, 200);
         })
         .catch(e => {
-            response.error(req, res, 'Internal Error', 500, e);
+            error(req, res, 'Internal Error', 500, e);
         });
 });
 
-module.exports = router;
+export default router;

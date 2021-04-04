@@ -1,15 +1,11 @@
-const Model = require('./model');
+import Model from './model';
 
-function addMessage(message) {
-    const myMessage = new Model(message);
-    myMessage.save();
-}
-
-async function getMessages(filterChat) {
+const getMessages = async (chatId) => {
     return new Promise((resolve, reject) => {
         let filter = {};
-        if (filterChat !== null) {
-            filter = { chat: filterChat };
+
+        if (chatId !== null) {
+            filter = { chat: chatId };
         }
         // populate: includes "username" instead of "_id"
         // exec: execute the population or handle error
@@ -26,13 +22,19 @@ async function getMessages(filterChat) {
     })
 }
 
-function removeMessage(id) {
+const addMessage = (message) => {
+    const myMessage = new Model(message);
+
+    myMessage.save();
+}
+
+const removeMessage = (id) => {
     return Model.deleteOne({
         _id: id
     });
 }
 
-async function updateText(id, message) {
+const updateText = async (id, message) => {
     const foundMessage = await Model.findOne({
         _id: id
     });
@@ -43,7 +45,7 @@ async function updateText(id, message) {
     return newMessage;
 }
 
-module.exports = {
+export default {
     add: addMessage,
     list: getMessages,
     updateText: updateText,

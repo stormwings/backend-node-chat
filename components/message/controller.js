@@ -1,9 +1,14 @@
-const store = require('./store');
-// fetch only socket key
-const socket = require('../../socket').socket;
-const config = require('../../config');
+import store from './store';
+import socket from './../../socket';
+import config from '../../config';
 
-function addMessage(chat, user, message, file) {
+const getMessages = (chatId) => {
+    return new Promise((resolve, reject) => {
+        resolve(store.list(chatId));
+    })
+}
+
+const addMessage = (chat, user, message, file) => {
     return new Promise((resolve, reject) => {
         if (!chat || !user || !message) {
             console.error('[messageController] user or message chat not found');
@@ -27,22 +32,14 @@ function addMessage(chat, user, message, file) {
         store.add(fullMessage);
 
         // emit 'message' to socket server => client
-        socket.io.emit('message', fullMessage);
+        socket.socket.io.emit('message', fullMessage);
 
         resolve(fullMessage);
     });
 }
 
-function getMessages(filterChat) {
-    return new Promise((resolve, reject) => {
-        resolve(store.list(filterChat));
-    })
-}
-
-function updateMessage(id, message) {
+const updateMessage = (id, message) => {
     return new Promise(async (resolve, reject) => {
-        console.log(id);
-        console.log(message);
         if (!id || !message) {
             reject('Invalid data');
             return false;
@@ -54,7 +51,7 @@ function updateMessage(id, message) {
     })
 }
 
-function deleteMessage(id) {
+const deleteMessage = (id) => {
     return new Promise((resolve, reject) => {
         if (!id) {
             reject('invalid id');
@@ -71,7 +68,7 @@ function deleteMessage(id) {
     });
 }
 
-module.exports = {
+export default {
     addMessage,
     getMessages,
     updateMessage,
