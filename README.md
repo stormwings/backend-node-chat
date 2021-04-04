@@ -1,5 +1,7 @@
 # backend-node-chat
 
 # pending tasks
-    - project to es7
+    - tests with jest
+    - config cors
+    - config debug (steps)
     - project to typescript
