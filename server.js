@@ -17,8 +17,6 @@ database(config.dbUrl);
 socket.connect(server);
 router(app);
 
-app.use(config.publicRoute, express.static('public'));
-
 server.listen(config.port, function () {
     console.log(`server up ${config.host}:${config.port}`);
 });
