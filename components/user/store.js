@@ -6,9 +6,7 @@ const addUser = (user) => {
     return myUser.save();
 }
 
-const listUsers = () => {
-    return Model.find();
-}
+const listUsers = (user = undefined) => Model.find(user);
 
 export default {
     add: addUser,
